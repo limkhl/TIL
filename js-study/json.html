@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JSON</title>
+  </head>
+  <body>
+    <script>
+      // JSON
+      // JavasScript Object Notation
+
+      /////////////////////////////////
+
+      // 1. Object to JSON
+      // stringify(obj)
+
+      let json = JSON.stringify(true);
+      console.log(json);
+
+      json = JSON.stringify(["apple", "banana"]);
+      console.log(json);
+
+      const rabbit = {
+        name: "tori",
+        color: "white",
+        size: null,
+        birthDate: new Date(),
+        // symbol: Symbol("id"),
+        // javascript에만 있는 특별한 데이터는 JSON 포함 안됨
+        jump: () => {
+          // 함수는 Object에 있는 데이터가 아니기 때문에 JSON 포함 안됨
+          console.log(`${name} can jump!`);
+        },
+      };
+
+      json = JSON.stringify(rabbit);
+      console.log(json);
+
+      json = JSON.stringify(rabbit, ["name", "color"]); // 해당하는 property만 json으로 변환됨
+      console.log(json);
+
+      json = JSON.stringify(rabbit, (key, value) => {
+        // 콜백함수로 모든 key와 value를 출력
+        console.log(`key: ${key}, value: ${value}`);
+        return key === "name" ? "ellie" : value;
+      });
+      console.log(json);
+      // 제일 먼저 출력되는 값은
+      // key: , value: [object Object]
+      // => 제일 처음으로 전달되는 것은 object를 싸고 있는 가장 최상위 것
+
+      /////////////////////////////////
+
+      // 2. JSON to Object
+      // parse(obj)
+      console.log("JSON to Object");
+      json = JSON.stringify(rabbit);
+      // const obj = JSON.parse(json);
+      // 이대로 parse하면 obj.birthDate는 string
+      const obj = JSON.parse(json, (key, value) => {
+        console.log(`key: ${key}, value: ${value}`);
+        return key === "birthDate" ? new Date(value) : value;
+      });
+      console.log(obj);
+      rabbit.jump();
+      // obj.jump();
+      // 에러: obj를 JSON으로 변환했을 때 jump라는 함수는 포함되지 않았음
+
+      console.log(rabbit.birthDate.getDate());
+      console.log(obj.birthDate.getDate());
+    </script>
+  </body>
+</html>
